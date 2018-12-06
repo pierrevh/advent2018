@@ -5,9 +5,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,18 +18,19 @@ public class Day1 {
         }
     }
 
-    public int firstRepeatSum(List<Integer> numbers) {
-        int total=0;
-
-        Map<Integer, Integer> totalIndex = new HashMap<>();
+    public int[] firstRepeatSum(List<Integer> numbers) {
+        int total = 0;
+        int pass = 1;
+        Set<Integer> totalRepeatChecker = new HashSet<>();
         while (true) {
             for (int number : numbers) {
                 total += number;
-                if (totalIndex.get(total) != null) {
-                    return total;
+                if (totalRepeatChecker.contains(total)) {
+                    return new int[]{total, pass};
                 }
-                totalIndex.put(total, 0);
+                totalRepeatChecker.add(total);
             }
+            pass++;
         }
     }
 
@@ -42,7 +41,10 @@ public class Day1 {
     public static void main(String[] args) throws IOException, URISyntaxException {
         Day1 day1 = new Day1();
         List<Integer> integers = day1.readFileOfIntegers("inputday1.txt");
-        System.out.println("Last freq   : "+ day1.sum(integers));
-        System.out.println("First repeat: "+ day1.firstRepeatSum(integers));
+        System.out.println("Last freq    : " + day1.sum(integers));
+        System.out.println();
+        int[] repeatResults = day1.firstRepeatSum(integers);
+        System.out.println("First repeat : " + repeatResults[0]);
+        System.out.println("Found in pass: " + repeatResults[1]);
     }
 }
